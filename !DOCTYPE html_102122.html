@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Food Supplies Inventory</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    background: #fafafa;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  #search {
+    display: block;
+    margin: 0 auto 15px;
+    padding: 8px 12px;
+    width: 300px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 90%;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background: #fff;
+  }
+  th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background: #4CAF50;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
+  th.asc::after {
+    content: " ▲";
+    position: absolute;
+    right: 10px;
+  }
+  th.desc::after {
+    content: " ▼";
+    position: absolute;
+    right: 10px;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  tbody tr:hover {
+    background-color: #e2f0d9;
+  }
+  caption {
+    caption-side: top;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  @media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+    thead tr {
+      display: none;
+    }
+    tbody tr {
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background: #fff;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    tbody td {
+      border: none;
+      padding-left: 50%;
+      position: relative;
+      text-align: right;
+    }
+    tbody td::before {
+      position: absolute;
+      top: 12px;
+      left: 10px;
+      width: 45%;
+      white-space: nowrap;
+      font-weight: bold;
+      text-align: left;
+      content: attr(data-label);
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>Food Supplies Inventory</h1>
+<input type="text" id="search" placeholder="Search food supplies..." aria-label="Search food supplies" />
+
+<table id="foodTable" aria-describedby="search">
+  <caption>Food Supplies Details</caption>
+  <thead>
+    <tr>
+      <th data-column="item" scope="col" tabindex="0">Item</th>
+      <th data-column="category" scope="col" tabindex="0">Category</th>
+      <th data-column="quantity" scope="col" tabindex="0">Quantity</th>
+      <th data-column="unit" scope="col" tabindex="0">Unit</th>
+      <th data-column="expiry" scope="col" tabindex="0">Expiry Date</th>
+      <th data-column="supplier" scope="col" tabindex="0">Supplier</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td data-label="Item">Apples</td>
+      <td data-label="Category">Fruits</td>
+      <td data-label="Quantity">150</td>
+      <td data-label="Unit">Kg</td>
+      <td data-label="Expiry">2025-10-10</td>
+      <td data-label="Supplier">Fresh Farms</td>
+    </tr>
+    <tr>
+      <td data-label="Item">Rice</td>
+      <td data-label="Category">Grains</td>
+      <td data-label="Quantity">500</td>
+      <td data-label="Unit">Kg</td>
+      <td data-label="Expiry">2026-05-15</td>
+      <td data-label="Supplier">Grain House</td>
+    </tr>
+    <tr>
+      <td data-label="Item">Milk</td>
+      <td data-label="Category">Dairy</td>
+      <td data-label="Quantity">200</td>
+      <td data-label="Unit">Liters</td>
+      <td data-label="Expiry">2025-08-20</td>
+      <td data-label="Supplier">Dairy Best</td>
+    </tr>
+    <tr>
+      <td data-label="Item">Carrots</td>
+      <td data-label="Category">Vegetables</td>
+      <td data-label="Quantity">300</td>
+      <td data-label="Unit">Kg</td>
+      <td data-label="Expiry">2025-09-05</td>
+      <td data-label="Supplier">Veggie World</td>
+    </tr>
+    <tr>
+      <td data-label="Item">Bread</td>
+      <td data-label="Category">Bakery</td>
+      <td data-label="Quantity">100</td>
+      <td data-label="Unit">Loaves</td>
+      <td data-label="Expiry">2025-08-12</td>
+      <td data-label="Supplier">Bake House</td>
+    </tr>
+  </tbody>
+</table>
+
+<script>
+  // Sorting function
+  const table = document.getElementById('foodTable');
+  const headers = table.querySelectorAll('th');
+  let sortDirection = {};
+
+  headers.forEach(header => {
+    header.addEventListener('click', () => {
+      const column = header.getAttribute('data-column');
+      const tbody = table.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const currentDirection = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+      sortDirection = {}; // Reset others
+      sortDirection[column] = currentDirection;
+
+      rows.sort((a, b) => {
+        const aText = a.querySelector(`td[data-label="${header.textContent}"]`).textContent.trim();
+        const bText = b.querySelector(`td[data-label="${header.textContent}"]`).textContent.trim();
+
+        if (!isNaN(Date.parse(aText)) && !isNaN(Date.parse(bText))) {
+          // Sort as date
+          return currentDirection === 'asc' ? new Date(aText) - new Date(bText) : new Date(bText) - new Date(aText);
+        } else if (!isNaN(aText) && !isNaN(bText)) {
+          // Sort as number
+          return currentDirection === 'asc' ? aText - bText : bText - aText;
+        } else {
+          // Sort as string
+          return currentDirection === 'asc' ? aText.localeCompare(bText) : bText.localeCompare(aText);
+        }
+      });
+
+      // Remove old rows and add sorted
+      tbody.innerHTML = '';
+      rows.forEach(row => tbody.appendChild(row));
+
+      // Update header arrows
+      headers.forEach(h => h.classList.remove('asc', 'desc'));
+      header.classList.add(currentDirection);
+    });
+  });
+
+  // Search/filter function
+  document.getElementById('search').addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    const rows = table.querySelectorAll('tbody tr');
+
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(query) ? '' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
