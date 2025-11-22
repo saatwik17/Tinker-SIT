@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rolling News & Hyperlinks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        img {
+            width: 300px;
+            cursor: pointer;
+            border: 2px solid #0072bc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #0072bc;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005a8c;
+        }
+        label {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Rolling News Page with Hyperlinks</h1>
+
+
+<marquee behavior="scroll" direction="left" scrollamount="6" style="background-color:#f2f2f2; border: 1px solid #ccc; padding: 10px;">
+    Welcome to SIT Nagpur! | Upcoming events and workshops. | Visit SIT website for more info. |
+</marquee>
+
+<h2>Hyperlink on Text</h2>
+<p>Visit the official <a href="https://sitnagpur.edu.in/" target="_blank">SIT Nagpur Website</a>.</p>
+
+<h2>Hyperlink on Image</h2>
+<a href="https://sitnagpur.edu.in/" target="_blank">
+    <img src="https://www.sibmnagpur.edu.in/wp-content/uploads/2025/05/APC_8564A-copy.webp" alt="SIT Nagpur Campus">
+</a>
+
+<h2>Select Your Gender</h2>
+<label><input type="radio" name="gender" value="male"> Male</label>
+<label><input type="radio" name="gender" value="female"> Female</label>
+<label><input type="radio" name="gender" value="other"> Other</label>
+
+</body>
+</html>
